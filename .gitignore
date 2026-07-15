@@ -1,0 +1,62 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*
+secrets*
+
+# macOS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Downloaded and licensed datasets
+data/raw/
+data/processed/
+data/addressbase/
+data/epc/
+data/openuprn/
+
+# Qdrant runtime storage
+data/qdrant/
+qdrant_storage/
+
+# Models and caches
+/models/
+.cache/
+huggingface/
+**/.cache/huggingface/
+
+# Snapshots and large artefacts
+artifacts/
+snapshots/
+*.snapshot
+*.tar
+*.tar.gz
+*.zip
+*.parquet
+
+# Generated data and evaluation output
+evaluation/
+*.csv
+
+# Logs
+*.log
+logs/
+*.broken
+*.bak
+*.backup
