@@ -34,5 +34,12 @@ class Settings(BaseSettings):
         validation_alias="RERANK_MODEL",
     )
 
+    # Ablation toggle: skip deterministic identity adjudication
+    # (rule adjustments + contradiction flags) when true.
+    disable_rules: bool = Field(
+        default=False,
+        validation_alias="DISABLE_RULES",
+    )
+
 
 settings = Settings()

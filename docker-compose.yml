@@ -30,6 +30,7 @@ services:
       QDRANT_COLLECTION: ${QDRANT_COLLECTION:-uk_properties}
       EMBED_MODEL: ${EMBED_MODEL:-sentence-transformers/all-MiniLM-L6-v2}
       RERANK_MODEL: ${RERANK_MODEL:-cross-encoder/ms-marco-MiniLM-L-6-v2}
+      DISABLE_RULES: ${DISABLE_RULES:-false}
       TOKENIZERS_PARALLELISM: "false"
       OMP_NUM_THREADS: "1"
       MKL_NUM_THREADS: "1"

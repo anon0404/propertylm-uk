@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from propertylm.config import settings
 from propertylm.utils.address import (
     address_keys,
     identifiers_contradict,
@@ -143,48 +144,52 @@ class Matcher:
         contradiction = False
         rule_adjustment = 0.0
 
-        if query_keys.postcode and candidate_postcode:
-            if query_keys.postcode == candidate_postcode:
-                rule_adjustment += 0.04
-                reasons.append("postcode_exact")
-            else:
-                rule_adjustment -= 0.80
+        if settings.disable_rules:
+            reasons.append("rules_disabled")
+
+        if not settings.disable_rules:
+            if query_keys.postcode and candidate_postcode:
+                if query_keys.postcode == candidate_postcode:
+                    rule_adjustment += 0.04
+                    reasons.append("postcode_exact")
+                else:
+                    rule_adjustment -= 0.80
+                    contradiction = True
+                    reasons.append("postcode_contradiction")
+
+            if identifiers_equal(
+                query_keys.number,
+                candidate_number,
+            ):
+                rule_adjustment += 0.12
+                reasons.append("house_number_exact")
+            elif identifiers_contradict(
+                query_keys.number,
+                candidate_number,
+            ):
+                rule_adjustment -= 0.85
                 contradiction = True
-                reasons.append("postcode_contradiction")
+                reasons.append("house_number_contradiction")
+            elif query_keys.number and not candidate_number:
+                rule_adjustment -= 0.15
+                reasons.append("candidate_number_missing")
 
-        if identifiers_equal(
-            query_keys.number,
-            candidate_number,
-        ):
-            rule_adjustment += 0.12
-            reasons.append("house_number_exact")
-        elif identifiers_contradict(
-            query_keys.number,
-            candidate_number,
-        ):
-            rule_adjustment -= 0.85
-            contradiction = True
-            reasons.append("house_number_contradiction")
-        elif query_keys.number and not candidate_number:
-            rule_adjustment -= 0.15
-            reasons.append("candidate_number_missing")
-
-        if identifiers_equal(
-            query_keys.unit,
-            candidate_unit,
-        ):
-            rule_adjustment += 0.10
-            reasons.append("unit_exact")
-        elif identifiers_contradict(
-            query_keys.unit,
-            candidate_unit,
-        ):
-            rule_adjustment -= 0.90
-            contradiction = True
-            reasons.append("unit_contradiction")
-        elif query_keys.unit and not candidate_unit:
-            rule_adjustment -= 0.25
-            reasons.append("candidate_unit_missing")
+            if identifiers_equal(
+                query_keys.unit,
+                candidate_unit,
+            ):
+                rule_adjustment += 0.10
+                reasons.append("unit_exact")
+            elif identifiers_contradict(
+                query_keys.unit,
+                candidate_unit,
+            ):
+                rule_adjustment -= 0.90
+                contradiction = True
+                reasons.append("unit_contradiction")
+            elif query_keys.unit and not candidate_unit:
+                rule_adjustment -= 0.25
+                reasons.append("candidate_unit_missing")
 
         retrieval_probability = (
             float(candidate["retrieval_score"]) + 1.0
