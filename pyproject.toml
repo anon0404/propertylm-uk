@@ -27,6 +27,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.7"]
+# Paper reproduction: baselines, sensitivity sweep, and figures (scripts/).
+paper = ["pandas>=2,<3", "rapidfuzz>=3,<4", "matplotlib>=3.8,<4"]
 
 [project.scripts]
 propertylm = "propertylm.cli:app"
